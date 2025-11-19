@@ -90,7 +90,13 @@ def index():
                     from io import BytesIO
                     file_stream = BytesIO(file_bytes)
                     
-                    predicted_class, confidence = classifier.predict(file_stream)
+                    predictions = classifier.predict(file_stream)
+                    
+                    # Top prediction
+                    predicted_class, confidence = predictions[0]
+                    
+                    # Other predictions (next 2)
+                    other_predictions = predictions[1:]
                     
                     anime_info = ANIME_METADATA.get(predicted_class, {})
                     
@@ -98,7 +104,8 @@ def index():
                                            anime_title=predicted_class,
                                            confidence=f"{confidence*100:.2f}%",
                                            anime_info=anime_info,
-                                           image_data=image_data)
+                                           image_data=image_data,
+                                           other_predictions=other_predictions)
                 except Exception as e:
                     return f"An error occurred during prediction: {e}"
             else:

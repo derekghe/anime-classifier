@@ -66,6 +66,31 @@
             font-weight: bold;
             color: #555;
         }
+        .other-predictions {
+            margin-top: 30px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+            text-align: left;
+        }
+        .other-predictions h3 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .prediction-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        .prediction-name {
+            color: #555;
+        }
+        .prediction-score {
+            font-weight: bold;
+            color: #666;
+        }
         a {
             text-decoration: none;
             color: #007bff;
@@ -107,6 +132,18 @@
             <div class="info-item"><span class="info-label">Source:</span> {{ anime_info.source }}</div>
             <div class="info-item" style="grid-column: span 2;"><span class="info-label">Genre:</span> {{ anime_info.genre }}</div>
             <div class="info-item" style="grid-column: span 2;"><span class="info-label">Synonyms:</span> {{ anime_info.title_synonyms }}</div>
+        </div>
+        {% endif %}
+
+        {% if other_predictions %}
+        <div class="other-predictions">
+            <h3>Other Possibilities</h3>
+            {% for name, score in other_predictions %}
+            <div class="prediction-item">
+                <span class="prediction-name">{{ name }}</span>
+                <span class="prediction-score">{{ "%.2f"|format(score * 100) }}%</span>
+            </div>
+            {% endfor %}
         </div>
         {% endif %}
 

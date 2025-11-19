@@ -80,16 +80,26 @@ class AnimeClassifier:
             transforms.Normalize(mean=normalize_mean, std=normalize_std)
         ])
 
-    def predict(self, image_file):
+    def predict(self, image_file, topk=3):
         image = Image.open(image_file).convert('RGB')
         image_tensor = self.transform(image).unsqueeze(0).to(self.device)
         
         with torch.no_grad():
             outputs = self.model(image_tensor)
             probabilities = torch.nn.functional.softmax(outputs, dim=1)
-            confidence, predicted_idx = torch.max(probabilities, 1)
+            # Get top k predictions
+            confidences, predicted_indices = torch.topk(probabilities, topk, dim=1)
             
-        predicted_class = self.class_names[predicted_idx.item()]
-        confidence_score = confidence.item()
+        results = []
+        for i in range(topk):
+            idx = predicted_indices[0][i].item()
+            score = confidences[0][i].item()
+            class_name = self.class_names[idx]
+            results.append((class_name, score))
         
-        return predicted_class, confidence_score
+        # Return the top result separately for backward compatibility if needed, 
+        # or just return the list. 
+        # Based on current usage: predicted_class, confidence = classifier.predict(file)
+        # I should probably change the return signature and update app.py
+        
+        return results
