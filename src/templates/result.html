@@ -34,6 +34,38 @@
             color: #666;
             margin-bottom: 20px;
         }
+        .image-box {
+            width: 300px;
+            height: 300px;
+            border: 1px solid #ddd;
+            margin: 0 auto 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background-color: #f9f9f9;
+        }
+        .image-box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            text-align: left;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .info-item {
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+        }
+        .info-label {
+            font-weight: bold;
+            color: #555;
+        }
         a {
             text-decoration: none;
             color: #007bff;
@@ -46,9 +78,38 @@
 <body>
     <div class="container">
         <h1>Result</h1>
+        
+        <div class="image-box">
+            {% if image_data %}
+            <img src="data:image/jpeg;base64,{{ image_data }}" alt="Uploaded Image">
+            {% else %}
+            <p>No image uploaded</p>
+            {% endif %}
+        </div>
+
         <p>The image is from:</p>
         <div class="result">{{ anime_title }}</div>
         <div class="confidence">Confidence: {{ confidence }}</div>
+
+        {% if anime_info %}
+        <div class="info-grid">
+            <div class="info-item"><span class="info-label">MyAnimeList:</span> 
+                {% if anime_info.anime_id %}
+                <a href="https://myanimelist.net/anime/{{ anime_info.anime_id }}" target="_blank">Link</a>
+                {% else %} N/A {% endif %}
+            </div>
+            <div class="info-item"><span class="info-label">Score:</span> {{ anime_info.score }}</div>
+            <div class="info-item"><span class="info-label">Type:</span> {{ anime_info.type }}</div>
+            <div class="info-item"><span class="info-label">Episodes:</span> {{ anime_info.episodes }}</div>
+            <div class="info-item"><span class="info-label">Status:</span> {{ anime_info.status }}</div>
+            <div class="info-item"><span class="info-label">Aired:</span> {{ anime_info.aired_from_year }}</div>
+            <div class="info-item"><span class="info-label">Studio:</span> {{ anime_info.studio }}</div>
+            <div class="info-item"><span class="info-label">Source:</span> {{ anime_info.source }}</div>
+            <div class="info-item" style="grid-column: span 2;"><span class="info-label">Genre:</span> {{ anime_info.genre }}</div>
+            <div class="info-item" style="grid-column: span 2;"><span class="info-label">Synonyms:</span> {{ anime_info.title_synonyms }}</div>
+        </div>
+        {% endif %}
+
         <a href="/">Try another image</a>
     </div>
 </body>

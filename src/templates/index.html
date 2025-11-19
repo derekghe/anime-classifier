@@ -48,6 +48,11 @@
         <form method="post" enctype="multipart/form-data">
             <input type="file" name="file" accept="image/*" required>
             <br>
+            {% if allowed_extensions %}
+            <p style="font-size: 0.8em; color: #666;">
+                Supported formats: {{ ', '.join(allowed_extensions) }}
+            </p>
+            {% endif %}
             <button type="submit">Classify</button>
         </form>
     </div>
