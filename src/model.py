@@ -44,14 +44,8 @@ class AnimeClassifier:
         self.transform = self._get_transforms()
 
     def _load_model(self, model_path):
-        # Initialize model architecture
-        # We use weights=None because we are loading our own weights, 
-        # but we need the structure. 
-        # Note: In the notebook, weights="IMAGENET1K_V2" was used for initialization before modification.
-        # Here we just need the structure to load the state_dict.
         model = models.resnet50(weights=None) 
         
-        # Modify the final layer as per the notebook
         fc_inputs = model.fc.in_features
         model.fc = nn.Sequential(
             nn.Linear(fc_inputs, 256),
@@ -60,8 +54,6 @@ class AnimeClassifier:
             nn.Linear(256, self.num_classes),
         )
 
-        # Load the trained weights
-        # map_location ensures it loads on CPU if CUDA is not available
         state_dict = torch.load(model_path, map_location=self.device)
         model.load_state_dict(state_dict)
         
@@ -87,7 +79,6 @@ class AnimeClassifier:
         with torch.no_grad():
             outputs = self.model(image_tensor)
             probabilities = torch.nn.functional.softmax(outputs, dim=1)
-            # Get top k predictions
             confidences, predicted_indices = torch.topk(probabilities, topk, dim=1)
             
         results = []
@@ -96,10 +87,5 @@ class AnimeClassifier:
             score = confidences[0][i].item()
             class_name = self.class_names[idx]
             results.append((class_name, score))
-        
-        # Return the top result separately for backward compatibility if needed, 
-        # or just return the list. 
-        # Based on current usage: predicted_class, confidence = classifier.predict(file)
-        # I should probably change the return signature and update app.py
         
         return results

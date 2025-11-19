@@ -13,7 +13,6 @@ DATA_PATH = os.path.join(BASE_DIR, 'data', 'anime_cleaned.csv')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 # Initialize the classifier
-# We initialize it once when the app starts
 try:
     classifier = AnimeClassifier(MODEL_PATH)
     print(f"Model loaded successfully from {MODEL_PATH}")
@@ -26,20 +25,15 @@ ANIME_METADATA = {}
 try:
     if os.path.exists(DATA_PATH):
         df = pd.read_csv(DATA_PATH)
-        # Create a lookup dictionary
-        # We need to match class names to CSV rows.
-        # We'll check both 'title' and 'title_english'
         
         if classifier:
             for name in classifier.class_names:
-                # Try to find by title (exact match)
+
                 row = df[df['title'] == name]
                 if row.empty:
-                    # Try to find by title_english (exact match)
                     row = df[df['title_english'] == name]
                 
                 if not row.empty:
-                    # Take the first match
                     data = row.iloc[0]
                     ANIME_METADATA[name] = {
                         'anime_id': data.get('anime_id'),
@@ -68,34 +62,28 @@ def allowed_file(filename):
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        # Check if the post request has the file part
+
         if 'file' not in request.files:
             return redirect(request.url)
         file = request.files['file']
-        # If the user does not select a file, the browser submits an
-        # empty file without a filename.
+
         if file.filename == '':
             return redirect(request.url)
         if file and allowed_file(file.filename):
             if classifier:
                 try:
-                    # Read file for prediction
-                    # We need to read it into bytes for base64, and also for PIL
+                    # read file for prediction, encode for display, reset stream for PIL
                     file_bytes = file.read()
                     
-                    # Encode for display
                     image_data = base64.b64encode(file_bytes).decode('utf-8')
                     
-                    # Reset stream for PIL
                     from io import BytesIO
                     file_stream = BytesIO(file_bytes)
                     
                     predictions = classifier.predict(file_stream)
                     
-                    # Top prediction
+
                     predicted_class, confidence = predictions[0]
-                    
-                    # Other predictions (next 2)
                     other_predictions = predictions[1:]
                     
                     anime_info = ANIME_METADATA.get(predicted_class, {})
