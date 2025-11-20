@@ -27,9 +27,11 @@ To run this project locally (suggest venv), follow these steps:
 ### Screenshots
 
 **Home Page**
+
 ![Home Page](docs/home_page.png)
 
 **Result Page**
+
 ![Result Page](docs/result_page.png)
 
 ## Video Links
