@@ -43,3 +43,4 @@
 ## Usage
 - Click on "Choose File" to upload an anime image.
 - Click "Classify" to see the predicted anime title.
+- See predictions, anime information, and link to MyAnimeList entry.
