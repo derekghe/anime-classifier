@@ -43,6 +43,7 @@ To run this project locally (suggest venv), follow these steps:
 The model was evaluated on a test set of over 11000 anime images.
 
 Detailed analysis with training curves, confusion matrix, testing evaluation, etc. please refer to the [notebook](notebooks/anime_classifier_model.ipynb).
+Backup pdf under docs/ if the notebook fails to load for whatever reason.
 
 *   **Final Test Accuracy**: 58.26%
 *   **Average Test Loss**: 1.9703
