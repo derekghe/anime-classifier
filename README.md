@@ -36,9 +36,8 @@ To run this project locally (suggest venv), follow these steps:
 
 ## Video Links
 
-*   **Demo Video**: [Link to Demo Video]
-*   **Technical Walkthrough**: [Link to Technical Walkthrough]
-
+*   **Demo Video**: https://youtu.be/cpQXadTvBoM
+*   **Technical Walkthrough**: https://youtu.be/D926qvZ0COE
 ## Evaluation
 
 The model was evaluated on a test set of over 11000 anime images.
